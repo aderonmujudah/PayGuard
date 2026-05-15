@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+backend/storage/
+backend/.env
+
+# Node
+node_modules/
+.next/
+frontend/.env
+frontend/.env.local
+
+# Models (drop trained artifacts here, not committed)
+models/invoice_extractor/*
+!models/invoice_extractor/.gitkeep
+
+.DS_Store

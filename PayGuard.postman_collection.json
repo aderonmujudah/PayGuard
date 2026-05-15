@@ -1,0 +1,105 @@
+{
+  "info": {
+    "name": "PayGuard API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base", "value": "http://localhost:8000/api" },
+    { "key": "token", "value": "" },
+    { "key": "invoiceId", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Auth - Login",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{base}}/auth/login-json",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"email\":\"demo@payguard.io\",\"password\":\"demo1234\"}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "var j = pm.response.json();",
+              "pm.collectionVariables.set('token', j.access_token);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Dashboard Summary",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": "{{base}}/dashboard/summary"
+      }
+    },
+    {
+      "name": "List Invoices",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": "{{base}}/invoices"
+      }
+    },
+    {
+      "name": "Upload Invoice",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": "{{base}}/invoices/upload",
+        "body": { "mode": "formdata", "formdata": [{ "key": "file", "type": "file", "src": [] }] }
+      }
+    },
+    {
+      "name": "Invoice Detail",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": "{{base}}/invoices/{{invoiceId}}"
+      }
+    },
+    {
+      "name": "Run Verification",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": "{{base}}/pipeline/{{invoiceId}}/verify"
+      }
+    },
+    {
+      "name": "Run Risk Assessment",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": "{{base}}/pipeline/{{invoiceId}}/assess"
+      }
+    },
+    {
+      "name": "Payment Action",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": "{{base}}/payments/{{invoiceId}}/action",
+        "body": { "mode": "raw", "raw": "{\"action\":\"hold\"}" }
+      }
+    },
+    {
+      "name": "Audit Log",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": "{{base}}/audit"
+      }
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #f6f8fb;
+}
+
+body {
+  background: var(--bg);
+  color: #0f172a;
+  font-feature-settings: "cv11", "ss01";
+}
+
+.card {
+  @apply rounded-xl border border-slate-200 bg-white shadow-sm;
+}
